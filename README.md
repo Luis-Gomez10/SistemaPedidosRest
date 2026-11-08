@@ -4,7 +4,7 @@
 
 **Entorno de Base de Datos:** MySQL
 
-**Lenguaje / Entorno:** Java 21 (VS Code / NetBeans 22)
+**Lenguaje / Entorno:** Java 21 (NetBeans 22)
 
 ---
 

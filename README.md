@@ -148,7 +148,7 @@ Al realizar el mapeo relacional en **MySQL**, se aplican los siguientes criterio
 ## 4. Instrucciones Generales de Desarrollo
 
 1. **Estructura del Proyecto:**
-   - Desarrollar en **VS Code** o **NetBeans 22** con **JDK 21**.
+   - Desarrollar en **NetBeans 22** con **JDK 21**.
    - Paquetes de trabajo:
      - `com.restaurante.modelo` (Contiene las 5 clases UML y sus métodos).
      - `com.restaurante.dao` (Persistencia JDBC hacia MySQL).

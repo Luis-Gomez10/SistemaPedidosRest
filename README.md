@@ -1,7 +1,3 @@
-# Guía de Desarrollo y Restricciones del Proyecto
-
-**Asignatura:** Proyecto de Programación
-
 **Entorno de Base de Datos:** MySQL
 
 **Lenguaje / Entorno:** Java 21 (NetBeans 22)

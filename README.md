@@ -7,132 +7,53 @@
 **Lenguaje / Entorno:** Java 21 (NetBeans 22)
 
 ## 1. Diagrama de Clases UML (Modelo de Referencia)
+```mermaid
+classDiagram
+    class Cliente {
+        -String idCliente
+        -String nombre
+        -String telefono
+        +registrarCliente() void
+        +buscarCliente() Cliente
+    }
 
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1080" width="100%" height="100%" style="background-color: #0d1117; font-family: -apple-system, BlinkMacSystemFont, &#39;Segoe UI&#39;, Roboto, Helvetica, Arial, sans-serif;">
-  <style>
-    .title-box { fill: #161b22; stroke: #30363d; stroke-width: 2; rx: 8px; }
-    .title-text { fill: #f0f6fc; font-size: 16px; font-weight: bold; text-anchor: middle; letter-spacing: 1px; }
-    
-    .class-box { fill: #161b22; stroke: #58a6ff; stroke-width: 2; rx: 6px; }
-    .header-box { fill: #1f6feb; rx: 4px; }
-    .class-name { fill: #ffffff; font-size: 16px; font-weight: bold; text-anchor: middle; }
-    
-    .section-title { fill: #8b949e; font-size: 12px; font-weight: bold; }
-    .attribute-text { fill: #79c0ff; font-size: 13px; font-family: 'Courier New', Courier, monospace; }
-    .method-text { fill: #d2a8ff; font-size: 13px; font-family: 'Courier New', Courier, monospace; }
-    .line-divider { stroke: #30363d; stroke-width: 1.5; }
-    
-    .arrow-line { stroke: #8b949e; stroke-width: 2; }
-    .arrow-head { fill: #8b949e; }
-  </style>
+    class Mesa {
+        -String idMesa
+        -String numero
+        -int capacidad
+        -String estado
+        +cambiarEstado() void
+        +consultarMesas() void
+    }
 
-  <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head" />
-    </marker>
-  </defs>
+    class Producto {
+        -String idProducto
+        -String nombre
+        -double precioUnitario
+        -boolean disponible
+        +registrarProductos() void
+        +buscarProducto() Producto
+    }
 
-  <!-- BANNER TÍTULO -->
-  <rect x="150" y="30" width="600" height="50" class="title-box" />
-  <text x="450" y="62" class="title-text">DIAGRAMA DE CLASE UML - SISTEMA PEDIDOS RESTAURANTE</text>
+    class Pedido {
+        -String idPedido
+        -Date fecha
+        -String estado
+        -String total
+        +crearPedido() void
+        +calcularTotal() double
+    }
 
-  <!-- CLASE CLIENTE -->
-  <g transform="translate(50, 140)">
-    <rect x="0" y="0" width="240" height="230" class="class-box" />
-    <path d="M 0 0 h 240 v 40 h -240 z" class="header-box" />
-    <text x="120" y="26" class="class-name">Cliente</text>
-    
-    <text x="15" y="60" class="section-title">Atributos</text>
-    <text x="15" y="82" class="attribute-text">- idCliente: String</text>
-    <text x="15" y="104" class="attribute-text">- nombre: String</text>
-    <text x="15" y="126" class="attribute-text">- telefono: String</text>
-    
-    <line x1="0" y1="140" x2="240" y2="140" class="line-divider" />
-    
-    <text x="15" y="160" class="section-title">Métodos</text>
-    <text x="15" y="182" class="method-text">+ registrarCliente(): void</text>
-    <text x="15" y="204" class="method-text">+ buscarCliente(): Cliente</text>
-  </g>
+    class DetallePedido {
+        -int cantidad
+        -double precioAplicado
+        +calcularSubtotal() double
+    }
 
-  <!-- CLASE PEDIDO -->
-  <g transform="translate(330, 140)">
-    <rect x="0" y="0" width="240" height="270" class="class-box" />
-    <path d="M 0 0 h 240 v 40 h -240 z" class="header-box" />
-    <text x="120" y="26" class="class-name">Pedido</text>
-    
-    <text x="15" y="60" class="section-title">Atributos</text>
-    <text x="15" y="82" class="attribute-text">- idPedido: String</text>
-    <text x="15" y="104" class="attribute-text">- fecha: Date</text>
-    <text x="15" y="126" class="attribute-text">- estado: String</text>
-    <text x="15" y="148" class="attribute-text">- total: String</text>
-    
-    <line x1="0" y1="162" x2="240" y2="162" class="line-divider" />
-    
-    <text x="15" y="182" class="section-title">Métodos</text>
-    <text x="15" y="204" class="method-text">+ crearPedido(): void</text>
-    <text x="15" y="226" class="method-text">+ calcularTotal(): double</text>
-  </g>
-
-  <!-- CLASE MESA -->
-  <g transform="translate(610, 140)">
-    <rect x="0" y="0" width="240" height="250" class="class-box" />
-    <path d="M 0 0 h 240 v 40 h -240 z" class="header-box" />
-    <text x="120" y="26" class="class-name">Mesa</text>
-    
-    <text x="15" y="60" class="section-title">Atributos</text>
-    <text x="15" y="82" class="attribute-text">- idMesa: String</text>
-    <text x="15" y="104" class="attribute-text">- numero: String</text>
-    <text x="15" y="126" class="attribute-text">- capacidad: int</text>
-    <text x="15" y="148" class="attribute-text">- estado: String</text>
-    
-    <line x1="0" y1="162" x2="240" y2="162" class="line-divider" />
-    
-    <text x="15" y="182" class="section-title">Métodos</text>
-    <text x="15" y="204" class="method-text">+ cambiarEstado(): void</text>
-    <text x="15" y="226" class="method-text">+ consultarMesas(): void</text>
-  </g>
-
-  <!-- CLASE DETALLEPEDIDO -->
-  <g transform="translate(330, 490)">
-    <rect x="0" y="0" width="240" height="200" class="class-box" />
-    <path d="M 0 0 h 240 v 40 h -240 z" class="header-box" />
-    <text x="120" y="26" class="class-name">DetallePedido</text>
-    
-    <text x="15" y="60" class="section-title">Atributos</text>
-    <text x="15" y="82" class="attribute-text">- cantidad: int</text>
-    <text x="15" y="104" class="attribute-text">- precioAplicado: double</text>
-    
-    <line x1="0" y1="120" x2="240" y2="120" class="line-divider" />
-    
-    <text x="15" y="140" class="section-title">Métodos</text>
-    <text x="15" y="162" class="method-text">+ calcularSubtotal(): double</text>
-  </g>
-
-  <!-- CLASE PRODUCTO -->
-  <g transform="translate(330, 770)">
-    <rect x="0" y="0" width="240" height="250" class="class-box" />
-    <path d="M 0 0 h 240 v 40 h -240 z" class="header-box" />
-    <text x="120" y="26" class="class-name">Producto</text>
-    
-    <text x="15" y="60" class="section-title">Atributos</text>
-    <text x="15" y="82" class="attribute-text">- idProducto: String</text>
-    <text x="15" y="104" class="attribute-text">- nombre: String</text>
-    <text x="15" y="126" class="attribute-text">- precioUnitario: double</text>
-    <text x="15" y="148" class="attribute-text">- disponible: boolean</text>
-    
-    <line x1="0" y1="162" x2="240" y2="162" class="line-divider" />
-    
-    <text x="15" y="182" class="section-title">Métodos</text>
-    <text x="15" y="204" class="method-text">+ registrarProductos(): void</text>
-    <text x="15" y="226" class="method-text">+ buscarProducto(): Producto</text>
-  </g>
-
-  <!-- RELACIONES (FLECHAS) -->
-  <line x1="330" y1="240" x2="290" y2="240" class="arrow-line" marker-end="url(#arrow)" />
-  <line x1="570" y1="240" x2="610" y2="240" class="arrow-line" marker-end="url(#arrow)" />
-  <line x1="450" y1="410" x2="450" y2="490" class="arrow-line" marker-end="url(#arrow)" />
-  <line x1="450" y1="690" x2="450" y2="770" class="arrow-line" marker-end="url(#arrow)" />
-</svg>
+    Pedido "0..1" --> "1" Cliente : cliente
+    Pedido "0..1" --> "1" Mesa : mesa
+    Pedido "1" *-- "1..*" DetallePedido : contiene
+    DetallePedido "1" --> "1" Producto : producto
 
 ### Vista de Texto / Estructura Tabular
 

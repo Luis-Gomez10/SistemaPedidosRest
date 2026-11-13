@@ -14,14 +14,12 @@ public class DetallePedido {
         
     }
     
-    // Constructor con los parámetros exactos del diagrama
     public DetallePedido(String nombrePlatillo, int cantidad, double precioAplicado) {
         this.nombrePlatillo = nombrePlatillo;
         this.cantidad = cantidad; 
         this.precioAplicado = precioAplicado;
     }
     
-    // Método según el diagrama
     public double calcularSubtotal() {
         return this.cantidad * this.precioAplicado; 
     }

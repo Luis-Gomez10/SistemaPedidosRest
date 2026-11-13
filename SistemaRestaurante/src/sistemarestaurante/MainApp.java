@@ -52,7 +52,7 @@ public class MainApp extends JFrame{
         btnFactura.addActionListener(e -> exportarFacturaHTML());
     }
     
-    // Método para crear y abrir una factura bonita en HTML
+    // Método para crear y abrir una factura en HTML
     private void exportarFacturaHTML() {
         try {
             String contenidoHtml = 

@@ -59,7 +59,7 @@ public class FrmLogin extends JFrame {
         String usuario = txtUsuario.getText().trim();
         String contraseña = new String(txtContraseña.getPassword()).trim();
         
-        // Validación 1: Campos vacíos (según rúbrica)
+        // Validación 1: Campos vacíos
         if (usuario.isEmpty() || contraseña.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos obligatorios.", "Campos vacíos", JOptionPane.WARNING_MESSAGE);
             return;
@@ -68,7 +68,7 @@ public class FrmLogin extends JFrame {
         // Validación 2: Credenciales
         // Credencial de prueba temporal: admin / 12345
         if (usuario.equals("admin") && contraseña.equals("12345")) {
-            JOptionPane.showMessageDialog(this, "¡Bienvenido al sistema, " + usuario + "!", "Acceso COrrecto", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "¡Bienvenido al sistema, " + usuario + "!", "Acceso Correcto", JOptionPane.INFORMATION_MESSAGE);
             
             // Abrir el Panel Principal (MainApp)
             MainApp panelPrincipal = new MainApp();

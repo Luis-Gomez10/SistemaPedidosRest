@@ -1,52 +1,50 @@
-package sistemarestaurante;
+package modelo;
+
 /**
+ * @author AA24025, GG14009, CR25046 y RA25009
  *
- * @author Bianca Clarissa Ramírez Arévalo
+ * Relación:
+ * DetallePedido * ---- 1 Producto
  */
 public class DetallePedido {
-    private String nombrePlatillo; // Para identificar qué se pidió
+    private final Producto producto;
     private int cantidad;
-    private double precioAplicado;
-    
-    // Constructor vacío
-    public DetallePedido() {
-        
-        
+
+    public DetallePedido(Producto producto, int cantidad) {
+        if (producto == null) {
+            throw new IllegalArgumentException("El producto no puede ser null.");
+        }
+        if (cantidad <= 0) {
+            throw new IllegalArgumentException("La cantidad debe ser mayor que cero.");
+        }
+
+        this.producto = producto;
+        this.cantidad = cantidad;
     }
-    
-    public DetallePedido(String nombrePlatillo, int cantidad, double precioAplicado) {
-        this.nombrePlatillo = nombrePlatillo;
-        this.cantidad = cantidad; 
-        this.precioAplicado = precioAplicado;
+
+    public Producto getProducto() {
+        return producto;
     }
-    
-    public double calcularSubtotal() {
-        return this.cantidad * this.precioAplicado; 
-    }
-    
-    // Getters y Setters
-    public String getNombrePlatillo() {
-        return nombrePlatillo;
-    }
-    
+
     public int getCantidad() {
         return cantidad;
     }
-    
+
     public void setCantidad(int cantidad) {
+        if (cantidad <= 0) {
+            throw new IllegalArgumentException("La cantidad debe ser mayor que cero.");
+        }
         this.cantidad = cantidad;
     }
-    
-    public double getPrecioAplicado() {
-        return precioAplicado;
+
+    public double getSubtotal() {
+        return producto.getPrecio() * cantidad;
     }
-    
-    public void setPrecioAplicado(double precioAplicado) {
-        this.precioAplicado = precioAplicado;
-    }
-    
+
     @Override
     public String toString() {
-        return cantidad + "x " + nombrePlatillo + " (Precio Unitario: $" + precioAplicado + ") - Subtotal: $" + calcularSubtotal();
+        return producto.getNombre()
+                + " x " + cantidad
+                + " = $" + String.format("%.2f", getSubtotal());
     }
 }

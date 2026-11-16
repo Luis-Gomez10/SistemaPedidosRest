@@ -1,162 +1,94 @@
-**Entorno de Base de Datos:** MySQL
+# Sistema de Gestión de Pedidos de Restaurante
 
-**Lenguaje / Entorno:** Java 21 (NetBeans 22)
+Aplicación de escritorio desarrollada en **Java (JDK 21)** utilizando **Java Swing** y persistencia relacional en **MySQL** (vía XAMPP). El sistema permite administrar clientes, mesas, productos y el ciclo completo de pedidos con cálculo automático de subtotales y totales.
 
-## 1. Diagrama de Clases UML (Modelo de Referencia)
+---
 
-### Opción A: Renderizable (Mermaid.js)
+## 📋 Requisitos Previos y Descargas Oficiales
 
-```mermaid
-classDiagram
-    class Cliente {
-        -String idCliente
-        -String nombre
-        -String telefono
-        +registrarCliente() void
-        +buscarCliente() Cliente
-    }
+Para mantener ligero el paquete de entrega del proyecto, no se incluyen los instaladores de las herramientas de desarrollo. Descárgalos directamente desde sus portales oficiales:
 
-    class Mesa {
-        -String idMesa
-        -String numero
-        -int capacidad
-        -String estado
-        +cambiarEstado() void
-        +consultarMesas() void
-    }
+1. **Java Development Kit (JDK 21):**
+   * [Descargar Oracle JDK 21](https://www.oracle.com/java/technologies/downloads/#java21) o [Adoptium OpenJDK 21](https://adoptium.net/)
+2. **XAMPP (Servidor MySQL y phpMyAdmin):**
+   * [Descargar XAMPP Oficial (Apache Friends)](https://www.apachefriends.org/es/index.html)
+3. **IDE de Desarrollo (Opcional si se ejecuta desde consola/JAR):**
+   * [Apache NetBeans 22](https://netbeans.apache.org/front/main/download/)
+4. **Conector JDBC para MySQL:**
+   * [Descargar MySQL Connector/J (Platform Independent)](https://dev.mysql.com/downloads/connector/j/) *(Seleccionar versión `.zip` o `.tar.gz` para extraer el archivo `.jar`)*.
 
-    class Producto {
-        -String idProducto
-        -String nombre
-        -double precioUnitario
-        -boolean disponible
-        +registrarProductos() void
-        +buscarProducto() Producto
-    }
+---
 
-    class Pedido {
-        -String idPedido
-        -Date fecha
-        -String estado
-        -String total
-        +crearPedido() void
-        +calcularTotal() double
-    }
+## ⚙️ Guía de Instalación y Configuración
 
-    class DetallePedido {
-        -int cantidad
-        -double precioAplicado
-        +calcularSubtotal() double
-    }
+### Paso 1: Instalar e Iniciar MySQL con XAMPP
+1. Ejecuta el instalador de **XAMPP** y asegúrate de marcar al menos los componentes **MySQL** y **phpMyAdmin**.
+2. Abre el **XAMPP Control Panel**.
+3. Haz clic en el botón **Start** en los módulos **Apache** y **MySQL** (ambos deben ponerse en verde).
 
-    Pedido "0..*" --> "0..1" Cliente : asociado a
-    Pedido "0..*" --> "0..1" Mesa : asignado a
-    Pedido "1" --> "1..*" DetallePedido : contiene
-    DetallePedido "0..*" --> "1" Producto : referencia a
-```
+---
 
-### Opción B: Vista de Texto / Estructura Tabular
+### Paso 2: Crear la Base de Datos y Ejecutar el Script SQL
+1. Abre tu navegador e ingresa a `http://localhost/phpmyadmin`.
+2. Haz clic en la pestaña **SQL** en el menú superior.
+3. Copia y pega el siguiente script completo y presiona **Continuar** (o *Go*) para crear la base de datos `sistema_restaurante.sql` y sus tablas:
 
-Si la plataforma donde abres el archivo `.md` no soporta bloques de código de tipo `mermaid`, puedes guiarte por esta matriz de referencia:
+```sql
+CREATE DATABASE IF NOT EXISTS restaurante_db
+DEFAULT CHARACTER SET utf8mb4
+DEFAULT COLLATE utf8mb4_unicode_ci;
 
-| Clase | Atributos | Métodos | Relaciones | 
-| ----- | ----- | ----- | ----- | 
-| **Cliente** | `- idCliente: String`<br>`- nombre: String`<br>`- telefono: String` | `+ registrarCliente(): void`<br>`+ buscarCliente(): Cliente` | Referenciado por `Pedido` (0..1) | 
-| **Mesa** | `- idMesa: String`<br>`- numero: String`<br>`- capacidad: int`<br>`- estado: String` | `+ cambiarEstado(): void`<br>`+ consultarMesas(): void` | Referenciada por `Pedido` (0..1) | 
-| **Producto** | `- idProducto: String`<br>`- nombre: String`<br>`- precioUnitario: double`<br>`- disponible: boolean` | `+ registrarProductos(): void`<br>`+ buscarProducto(): Producto` | Referenciado por `DetallePedido` (1) | 
-| **Pedido** | `- idPedido: String`<br>`- fecha: Date`<br>`- estado: String`<br>`- total: String` | `+ crearPedido(): void`<br>`+ calcularTotal(): double` | Apunta a `Cliente` (0..1), `Mesa` (0..1) y `DetallePedido` (1..\*) | 
-| **DetallePedido** | `- cantidad: int`<br>`- precioAplicado: double` | `+ calcularSubtotal(): double` | Pertenece a `Pedido` (1) y apunta a `Producto` (1) | 
+USE restaurante_db;
 
-## 2. Mapeo Completo de Clases, Atributos y Métodos en Java
+-- 1. Tabla Cliente
+CREATE TABLE IF NOT EXISTS Cliente (
+    id_cliente VARCHAR(50) NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    telefono VARCHAR(20) DEFAULT NULL,
+    PRIMARY KEY (id_cliente)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-A continuación se detalla la estructura exacta de atributos y métodos requeridos para la capa **Modelo / Servicios** en Java (`com.restaurante.modelo`), respetando la visibilidad (`-` privado, `+` público) del diagrama UML.
+-- 2. Tabla Mesa
+CREATE TABLE IF NOT EXISTS Mesa (
+    id_mesa VARCHAR(50) NOT NULL,
+    numero VARCHAR(20) NOT NULL,
+    capacidad INT NOT NULL,
+    estado VARCHAR(30) NOT NULL,
+    PRIMARY KEY (id_mesa)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-### 2.1 Clase `Cliente`
+-- 3. Tabla Producto
+CREATE TABLE IF NOT EXISTS Producto (
+    id_producto VARCHAR(50) NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    categoria VARCHAR(50) NOT NULL,
+    descripcion TEXT DEFAULT NULL,
+    precio_unitario DECIMAL(10, 2) NOT NULL,
+    disponible TINYINT(1) NOT NULL DEFAULT 1,
+    PRIMARY KEY (id_producto)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-- **Atributos:**
-  - `- idCliente: String`
-  - `- nombre: String`
-  - `- telefono: String`
+-- 4. Tabla Pedido
+CREATE TABLE IF NOT EXISTS Pedido (
+    id_pedido VARCHAR(50) NOT NULL,
+    fecha DATETIME NOT NULL,
+    estado VARCHAR(30) NOT NULL,
+    total DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    id_cliente VARCHAR(50) DEFAULT NULL,
+    id_mesa VARCHAR(50) DEFAULT NULL,
+    PRIMARY KEY (id_pedido),
+    CONSTRAINT fk_pedido_cliente FOREIGN KEY (id_cliente) REFERENCES Cliente(id_cliente) ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT fk_pedido_mesa FOREIGN KEY (id_mesa) REFERENCES Mesa(id_mesa) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-- **Métodos Obligatorios:**
-  - `+ registrarCliente(): void`
-  - `+ buscarCliente(): Cliente`
-
-### 2.2 Clase `Mesa`
-
-- **Atributos:**
-  - `- idMesa: String`
-  - `- numero: String`
-  - `- capacidad: int`
-  - `- estado: String`
-
-- **Métodos Obligatorios:**
-  - `+ cambiarEstado(): void`
-  - `+ consultarMesas(): void`
-
-### 2.3 Clase `Producto`
-
-- **Atributos:**
-  - `- idProducto: String`
-  - `- nombre: String`
-  - `- precioUnitario: double`
-  - `- disponible: boolean`
-
-- **Métodos Obligatorios:**
-  - `+ registrarProductos(): void`
-  - `+ buscarProducto(): Producto`
-
-### 2.4 Clase `Pedido`
-
-- **Atributos:**
-  - `- idPedido: String`
-  - `- fecha: java.util.Date`
-  - `- estado: String`
-  - `- total: String`
-  - `- cliente: Cliente` *(Asociación UML)*
-  - `- mesa: Mesa` *(Asociación UML)*
-
-- **Métodos Obligatorios:**
-  - `+ crearPedido(): void`
-  - `+ calcularTotal(): double`
-
-### 2.5 Clase `DetallePedido`
-
-- **Atributos:**
-  - `- cantidad: int`
-  - `- precioAplicado: double`
-  - `- producto: Producto` *(Asociación UML)*
-
-- **Métodos Obligatorios:**
-  - `+ calcularSubtotal(): double`
-
-## 3. Adaptación Técnica para la Base de Datos (MySQL)
-
-Al realizar el mapeo relacional en **MySQL**, se aplican los siguientes criterios para mantener la consistencia con las clases:
-
-1. **Atributo `total` en la Tabla `Pedido`:** En la base de datos se almacena como `DECIMAL(10,2)` para permitir que el método `calcularTotal(): double` opere con precisión contable.
-2. **Claves Foráneas (FK):**
-   - Tabla `Pedido`: contiene `id_cliente` (hacia `Cliente`) e `id_mesa` (hacia `Mesa`), ambas opcionales (`NULLABLE`).
-   - Tabla `DetallePedido`: contiene `id_pedido` (hacia `Pedido`) e `id_producto` (hacia `Producto`).
-3. **Clave Primaria de `DetallePedido`:** Se añade la clave primaria sintética `id_detalle INT AUTO_INCREMENT PRIMARY KEY`.
-4. **Campo `disponible`:** En MySQL se mapea a `TINYINT(1)` (1 = `true`, 0 = `false`).
-
-## 4. Instrucciones Generales de Desarrollo
-
-1. **Estructura del Proyecto:**
-   - Desarrollar en **NetBeans 22** con **JDK 21**.
-   - Paquetes de trabajo:
-     - `com.restaurante.modelo` (Contiene las 5 clases UML y sus métodos).
-     - `com.restaurante.dao` (Persistencia JDBC hacia MySQL).
-     - `com.restaurante.controlador`
-     - `com.restaurante.vista` (Interfaz Swing).
-     - `com.restaurante.config` (Conexión a base de datos).
-
-2. **Reglas y Validaciones:**
-   - Cantidades e importes deben ser mayores que cero.
-   - No se pueden agregar productos con `disponible = false`.
-   - Los pedidos en estado *Cerrado* o *Completado* son inmutables.
-   - Cada modificación en `DetallePedido` debe invocar automáticamente la actualización de `calcularTotal()`.
-
-3. **Validación Final:**
-   - Probar el proyecto con `Clean and Build` en NetBeans 22 antes de crear la carpeta de entrega final `Proyecto_GTGP`.
+-- 5. Tabla DetallePedido
+CREATE TABLE IF NOT EXISTS DetallePedido (
+    id_detalle INT AUTO_INCREMENT NOT NULL,
+    id_pedido VARCHAR(50) NOT NULL,
+    id_producto VARCHAR(50) NOT NULL,
+    cantidad INT NOT NULL,
+    precio_aplicado DECIMAL(10, 2) NOT NULL,
+    PRIMARY KEY (id_detalle),
+    CONSTRAINT fk_detalle_pedido FOREIGN KEY (id_pedido) REFERENCES Pedido(id_pedido) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_detalle_producto FOREIGN KEY (id_producto) REFERENCES Producto(id_producto) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
